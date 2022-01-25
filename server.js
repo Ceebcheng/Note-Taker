@@ -50,6 +50,23 @@ app.post('/api/notes', (req, res) => {
 
 });
 
+app.delete('/api/notes/:id', (req, res) => {
+
+  fs.readFile('./Develop/db/db.json', 'utf8', (err, data) => {
+
+      var notes = JSON.parse(data);
+      for (let i = 0; i<notes.length; i++) {
+        if(notes[i].id == req.params.id) {
+          notes.splice(i, 1)
+        }
+      }
+
+      fs.writeFile('./Develop/db/db.json', JSON.stringify(notes), (err) => {
+          
+          res.json(req.body);
+      });
+  });
+});
 
 
 app.get('*', (req, res) =>
