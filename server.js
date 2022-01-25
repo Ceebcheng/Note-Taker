@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
+
 const PORT = process.env.port || 3001;
 
 const app = express();
@@ -31,6 +32,24 @@ app.get('/api/notes', (req, res) =>{
     );
 }
 );
+
+app.post('/api/notes', (req, res) => {
+
+  fs.readFile('./Develop/db/db.json', 'utf8', (err, data) => {
+
+      
+      var notes = JSON.parse(data);
+      req.body.id = notes.length + 1
+      notes.push(req.body); 
+
+      fs.writeFile('./Develop/db/db.json', JSON.stringify(notes), (err) => {
+          
+          res.json(req.body);
+      });
+  });
+
+});
+
 
 
 app.get('*', (req, res) =>
